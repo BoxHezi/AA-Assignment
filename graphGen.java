@@ -40,6 +40,7 @@ public class graphGen
 	}
 	
 	public static void generateAE() {
+		ArrayList<String>() aeList = new ArrayList<>();
 		try {
 			BufferedReader in = new BufferedReader (new FileReader("facebook_combined.txt")); 
 			BufferedWriter out = new BufferedWriter(new FileWriter("DataSetAE1.txt"));
