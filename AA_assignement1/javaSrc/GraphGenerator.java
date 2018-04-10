@@ -9,6 +9,9 @@ import java.util.*;
 public class GraphGenerator {
     private static final String ORIGIN_DATE_FILE = "facebook_combined.txt";
     private static final String AV_COMMAND_IN = "av.in";
+	/*
+	*AE1 has a density of 0.0406 and an edge count of 12991x2 = 25,982 edges
+	*/
 	private static final String AE1_COMMAND_IN = "aeH.in";
 	private static final String AE2_COMMAND_IN = "aeM.in";
 	private static final String AE3_COMMAND_IN = "aeL.in";
@@ -96,7 +99,8 @@ public class GraphGenerator {
 		it to the file AE*/ 
 		Random rand = new Random();
         int i = 0;
-        while (i != 1000) {
+		/*being 12991x2 = 25,982 edges....*/
+        while (i != 12991) {
         	int n = rand.nextInt(vert.size()) + 0;
 			int m = rand.nextInt(vert.size()) + 0;
 			if (!Edges.contains(vert.get(n)+" "+vert.get(m)) && !Edges.contains(vert.get(m)+" "+vert.get(n))) {
@@ -111,4 +115,5 @@ public class GraphGenerator {
 	
 	private static void printToFileRE(String fileName, List<String> Edges, String command) {
         //TODO
+	}
 }
