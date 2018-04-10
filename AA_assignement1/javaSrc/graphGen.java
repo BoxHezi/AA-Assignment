@@ -55,8 +55,8 @@ public class graphGen
 		ArrayList<String> unique = new ArrayList<>();
 		
 		try {
-			BufferedReader in = new BufferedReader (new FileReader("facebook_combined.txt")); 
-			BufferedWriter out = new BufferedWriter(new FileWriter("DataSetAV2.txt"));
+			BufferedReader in = new BufferedReader (new FileReader("facebook_combined20k1.txt")); 
+			BufferedWriter out = new BufferedWriter(new FileWriter("AVfacebook_combined20k1.txt"));
 			String[] token;
 			String str;
 			while ((str = in.readLine()) != null) {
