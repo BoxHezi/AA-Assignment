@@ -27,8 +27,10 @@ public class GraphGenerator {
         String str;
         String token[];
         int count = 0;
+        int lineCounter = 0;
         if (null != readFile) {
             while ((str = readFile.nextLine()) != null) {
+                lineCounter++;
                 token = str.split(" ");
                 String vertex = token[0];
                 if (!vertexList.contains(vertex)) {
@@ -39,6 +41,7 @@ public class GraphGenerator {
                     break;
                 }
             }
+            System.out.println("lineCounter: " + lineCounter);
             System.out.println("Vertex Size: " + vertexList.size());
             readFile.close();
         }
