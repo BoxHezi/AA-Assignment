@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class GraphGenerator {
     private static final String facebookFile = "facebook_combined.txt";
-    private String avFile = "avCommand.in";
+    private static final String avFile = "avCommand.in";
     private static final int vertexLimitation = 800;
 
     public static void main(String[] args) {
@@ -42,9 +42,10 @@ public class GraphGenerator {
             System.out.println("Vertex Size: " + vertexList.size());
             readFile.close();
         }
+        printToFile(avFile, vertexList, "AV");
     }
 
-    private void printToFile(String fileName, List<String> printElement) {
+    private static void printToFile(String fileName, List<String> printElement, String command) {
         PrintWriter printWriter = null;
         try {
             printWriter = new PrintWriter(new FileOutputStream(fileName));
@@ -54,7 +55,7 @@ public class GraphGenerator {
 
         if (null != printWriter) {
             for (String element : printElement) {
-                printWriter.println(element);
+                printWriter.println(command + " " + element);
             }
             printWriter.close();
         }
