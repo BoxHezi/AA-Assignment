@@ -100,6 +100,7 @@ public class GraphGenerator {
             for(String e : printElement) {
                 printWriter.println(e);
             }
+            printWriter.close();
         }
     }
 }
