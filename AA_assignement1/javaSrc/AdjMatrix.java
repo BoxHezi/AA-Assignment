@@ -29,9 +29,10 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
     public void addVertex(T vertLabel) {
         // Implement me!
         if (vertex.contains(vertLabel)) {
-            System.err.println("Vertex existed!");
+//            System.err.println("Vertex existed!");
             return;
         }
+        System.out.println("Add vertex: " + vertLabel);
         vertex.add(vertLabel);
 
         addToMatrix();
@@ -47,8 +48,6 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
         }
         tempMatrix = setDefaultMatrixValue(tempMatrix);
         matrix = tempMatrix;
-
-        printMatrix();
     }
 
     private Integer[][] setDefaultMatrixValue(Integer[][] matrix) {
@@ -74,8 +73,6 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
         // set both direction in the matrix graph
         matrix[srcIndex][tarIndex] = 1;
         matrix[tarIndex][srcIndex] = 1;
-
-        printMatrix();
     } // end of addEdge()
 
     public ArrayList<T> neighbours(T vertLabel) {
@@ -83,7 +80,7 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
         // Implement me!
         if (!existVertex(vertLabel)) {
             System.err.println("Vertex doesn't existed!");
-            return null;
+            return neighbours;
         }
         int vertIndex = findVertexIndex(vertLabel);
         for (int i = 0; i < vertex.size(); i++) {
@@ -135,8 +132,6 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
 
         matrix = newMatrix;
         vertex.remove(vertLabel);
-
-        printMatrix();
     } // end of removeVertex()
 
     public void removeEdge(T srcLabel, T tarLabel) {
@@ -151,8 +146,6 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
         // set both direction in the matrix graph
         matrix[srcIndex][tarIndex] = 0;
         matrix[tarIndex][srcIndex] = 0;
-
-        printMatrix();
     } // end of removeEdges()
 
     public void printVertices(PrintWriter os) {
@@ -161,7 +154,7 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
             os.print(currVertex + " ");
         }
         os.println();
-        os.close();
+        os.flush();
     } // end of printVertices()
 
     public void printEdges(PrintWriter os) {
@@ -182,7 +175,7 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
             }
             os.println();
         }
-        os.close();
+        os.flush();
     } // end of printEdges()
 
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
@@ -250,22 +243,6 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
     // check if a vertex existed or not
     private boolean existVertex(T vertLabel) {
         return vertex.contains(vertLabel);
-    }
-
-    // test output matrix
-    private void printMatrix() {
-        System.out.print("  ");
-        for (T currVertex : vertex) {
-            System.out.print(currVertex + " ");
-        }
-        System.out.println();
-        for (int i = 0; i < matrix.length; i++) {
-            System.out.print(vertex.get(i) + " ");
-            for (int j = 0; j < matrix.length; j++) {
-                System.out.print(matrix[i][j] + " ");
-            }
-            System.out.println();
-        }
     }
 
     private ArrayList<T> clearQueue() {
