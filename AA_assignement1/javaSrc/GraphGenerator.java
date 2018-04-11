@@ -15,14 +15,43 @@ public class GraphGenerator {
     private static final int LD_INDICATOR = 3;
     private static final int VERTEX_LIMIT = 500;
 
+    // store all 500 vertices in this list
     private ArrayList<String> vertexList = new ArrayList<>();
-    private ArrayList<String> edgeList = new ArrayList<>();
+    // need to clean list after generate different density graph
+    private ArrayList<String> tempVertexList = new ArrayList<>();
+    private ArrayList<String> tempEdgeList = new ArrayList<>();
 
     public static void main(String[] args) {
         GraphGenerator graphGenerator = new GraphGenerator();
+        graphGenerator.getFiveHundredVertex();
         graphGenerator.createGraphHD();
         graphGenerator.createGraphMD();
         graphGenerator.createGraphLD();
+    }
+
+    private void getFiveHundredVertex() {
+        Scanner readFile = null;
+        try {
+            readFile = new Scanner(new File(BASE_GRAPH_FILE));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (null != readFile) {
+            String str;
+            String token[];
+            while ((str = readFile.nextLine()) != null) {
+                if (vertexList.size() >= VERTEX_LIMIT) {
+                    break;
+                }
+                token = str.split("\\s");
+                String vertex = token[0];
+                if (!tempVertexList.contains(vertex)) {
+                    tempVertexList.add(vertex);
+                }
+            }
+            System.out.println(vertexList.size());
+            readFile.close();
+        }
     }
 
     private void createGraphHD() {
@@ -37,22 +66,22 @@ public class GraphGenerator {
             String edge;
             String[] token;
             while ((edge = readFile.nextLine()) != null) {
-                if (vertexList.size() >= VERTEX_LIMIT) {
+                if (tempVertexList.size() >= VERTEX_LIMIT) {
                     break;
                 }
-                edgeList.add(edge);
+                tempEdgeList.add(edge);
                 token = edge.split("\\s");
                 String vertex = token[0];
-                if (!vertexList.contains(vertex)) {
-                    vertexList.add(vertex);
+                if (!tempVertexList.contains(vertex)) {
+                    tempVertexList.add(vertex);
                 }
             }
             System.out.println("HD BASE GRAPH GENERATE!");
-            System.out.println(edgeList.size());
-            System.out.println(vertexList.size());
+            System.out.println(tempEdgeList.size());
+            System.out.println(tempVertexList.size());
             readFile.close();
         }
-        printToFile(HD_TEST_GRAPH, edgeList);
+        printToFile(HD_TEST_GRAPH, tempEdgeList);
     }
 
     private void createGraphMD() {
@@ -68,25 +97,25 @@ public class GraphGenerator {
             String token[];
             boolean addEdge = true;
             while ((edge = readFile.nextLine()) != null) {
-                if (vertexList.size() >= VERTEX_LIMIT) {
+                if (tempVertexList.size() >= VERTEX_LIMIT) {
                     break;
                 }
                 if (addEdge) {
-                    edgeList.add(edge);
+                    tempEdgeList.add(edge);
                 }
                 addEdge = !addEdge;
                 token = edge.split("\\s");
                 String vertex = token[0];
-                if (!vertexList.contains(vertex)) {
-                    vertexList.add(vertex);
+                if (!tempVertexList.contains(vertex)) {
+                    tempVertexList.add(vertex);
                 }
             }
             System.out.println("MD BASE GRAPH GENERATE!");
-            System.out.println(edgeList.size());
-            System.out.println(vertexList.size());
+            System.out.println(tempEdgeList.size());
+            System.out.println(tempVertexList.size());
             readFile.close();
         }
-        printToFile(MD_TEST_GRAPH, edgeList);
+        printToFile(MD_TEST_GRAPH, tempEdgeList);
     }
 
     private void createGraphLD() {
@@ -103,11 +132,11 @@ public class GraphGenerator {
             boolean addEdge = true;
             int addEdgeIndicator = LD_INDICATOR;
             while ((edge = readFile.nextLine()) != null) {
-                if (vertexList.size() >= VERTEX_LIMIT) {
+                if (tempVertexList.size() >= VERTEX_LIMIT) {
                     break;
                 }
                 if (addEdge && addEdgeIndicator == LD_INDICATOR) {
-                    edgeList.add(edge);
+                    tempEdgeList.add(edge);
                 }
                 addEdge = !addEdge;
                 addEdgeIndicator--;
@@ -116,16 +145,16 @@ public class GraphGenerator {
                 }
                 token = edge.split("\\s");
                 String vertex = token[0];
-                if (!vertexList.contains(vertex)) {
-                    vertexList.add(vertex);
+                if (!tempVertexList.contains(vertex)) {
+                    tempVertexList.add(vertex);
                 }
             }
             System.out.println("LD BASE GRAPH GENERATE!");
-            System.out.println(edgeList.size());
-            System.out.println(vertexList.size());
+            System.out.println(tempEdgeList.size());
+            System.out.println(tempVertexList.size());
             readFile.close();
         }
-        printToFile(LD_TEST_GRAPH, edgeList);
+        printToFile(LD_TEST_GRAPH, tempEdgeList);
     }
 
     private void printToFile(String filename, List<String> printElement) {
@@ -142,7 +171,7 @@ public class GraphGenerator {
             }
             printWriter.close();
         }
-        edgeList = new ArrayList<>();
-        vertexList = new ArrayList<>();
+        tempEdgeList = new ArrayList<>();
+        tempVertexList = new ArrayList<>();
     }
 }
