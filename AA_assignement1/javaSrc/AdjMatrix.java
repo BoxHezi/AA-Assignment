@@ -155,15 +155,18 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
         }
         os.println();
         os.flush();
+        System.out.println(vertex.size());
     } // end of printVertices()
 
     public void printEdges(PrintWriter os) {
         // Implement me!
+        int edgeCounter = 0;
         for (int i = 0; i < matrix.length; i++) {
             ArrayList<Integer> printList = new ArrayList<>();
             for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] == 1) {
                     printList.add(j);
+                    edgeCounter++;
                 }
             }
             if (printList.size() <= 0) {
@@ -176,6 +179,7 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
             os.println();
         }
         os.flush();
+        System.out.println(edgeCounter);
     } // end of printEdges()
 
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
