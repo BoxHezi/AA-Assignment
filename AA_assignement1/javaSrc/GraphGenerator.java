@@ -119,20 +119,19 @@ public class GraphGenerator {
                 }
                 if (addEdge) {
                     tempEdgeList.add(edge);
+                    token = edge.split("\\s");
+                    String vertex1 = token[0];
+                    String vertex2 = token[1];
+                    if (!tempVertexList.contains(vertex1)) {
+                        tempVertexList.add(vertex1);
+                    }
+                    if (!tempVertexList.contains(vertex2)) {
+                        tempVertexList.add(vertex2);
+                    }
                 }
                 addEdge = !addEdge;
-                token = edge.split("\\s");
-                String vertex1 = token[0];
-                String vertex2 = token[1];
-                if (!tempVertexList.contains(vertex1)) {
-                    tempVertexList.add(vertex1);
-                }
-                if (!tempVertexList.contains(vertex2)) {
-                    tempVertexList.add(vertex2);
-                }
             }
             System.out.println("MD BASE GRAPH GENERATE!");
-            System.out.println(tempVertexList.size());
             readFile.close();
         }
         printToFile(MD_TEST_GRAPH, tempEdgeList);
@@ -157,20 +156,20 @@ public class GraphGenerator {
                 }
                 if (addEdge && addEdgeIndicator == LD_INDICATOR) {
                     tempEdgeList.add(edge);
+                    token = edge.split("\\s");
+                    String vertex1 = token[0];
+                    String vertex2 = token[1];
+                    if (!tempVertexList.contains(vertex1)) {
+                        tempVertexList.add(vertex1);
+                    }
+                    if (!tempVertexList.contains(vertex2)) {
+                        tempVertexList.add(vertex2);
+                    }
                 }
                 addEdge = !addEdge;
                 addEdgeIndicator--;
                 if (addEdgeIndicator <= 0) {
                     addEdgeIndicator = LD_INDICATOR;
-                }
-                token = edge.split("\\s");
-                String vertex1 = token[0];
-                String vertex2 = token[1];
-                if (!tempVertexList.contains(vertex1)) {
-                    tempVertexList.add(vertex1);
-                }
-                if (!tempVertexList.contains(vertex2)) {
-                    tempVertexList.add(vertex2);
                 }
             }
             System.out.println("LD BASE GRAPH GENERATE!");
