@@ -4,16 +4,24 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Random;
 
 public class GraphGenerator {
     private static final String BASE_GRAPH_FILE = "facebook_combined.txt";
     private static final String HD_TEST_GRAPH = "HD_base_graph.txt";
     private static final String MD_TEST_GRAPH = "MD_base_graph.txt";
     private static final String LD_TEST_GRAPH = "LD_base_graph.txt";
+    private static final String AE_SET = "AE_SET.txt";
+    private static final String AV_SET = "AV_SET.txt";
+    private static final String RE_SET = "RE_SET.txt";
+    private static final String RV_SET = "RV_SET.txt";
+    private static final String N_SET = "N_SET.txt";
+    private static final String S_SET = "S_SET.txt";
     private static final int HD_INDICATOR = 1;
     private static final int MD_INDICATOR = 2;
     private static final int LD_INDICATOR = 3;
     private static final int VERTEX_LIMIT = 500;
+    private static final int DATA_SIZE = 200;
 
     // store all 500 vertices in this list
     private ArrayList<String> vertexList = new ArrayList<>();
@@ -27,8 +35,14 @@ public class GraphGenerator {
         graphGenerator.createGraphHD();
         graphGenerator.createGraphMD();
         graphGenerator.createGraphLD();
+        graphGenerator.generateRandAE();
+        graphGenerator.generateRandAV();
+        graphGenerator.generateRE();
+        graphGenerator.generateRV();
+        graphGenerator.generateN();
+        graphGenerator.generateS();
     }
-
+    
     private void getFiveHundredVertex() {
         Scanner readFile = null;
         try {
@@ -174,4 +188,112 @@ public class GraphGenerator {
         tempEdgeList = new ArrayList<>();
         tempVertexList = new ArrayList<>();
     }
+    /*************************************************************************************/
+    
+     private void generateRandAE() {
+        /*this doesn't go in generateEdges becasue we want random ones to add*/
+        ArrayList<String> edges = new ArrayList<>();
+        String str;
+        String token[];
+        Random rand = new Random();
+        int i = 0;
+        while (i != DATA_SIZE) {
+            int n = rand.nextInt(vertexList.size()) + 0;
+            int m = rand.nextInt(vertexList.size()) + 0;
+            if (!vertexList.contains(String.valueOf(n)+ " " +String.valueOf(m)) || !vertexList.contains(String.valueOf(m)+ " " +String.valueOf(n))) {
+                if (!edges.contains(String.valueOf(n)+ " " +String.valueOf(m)) || !edges.contains(String.valueOf(m)+ " " +String.valueOf(n))) {
+                    edges.add(n+ " " +m);
+                    i++;
+                }
+            }
+        }
+        printToFileData(AE_SET, edges,"AE");
+    }
+    
+    private void generateEdges(List<String> edges) {
+        String str;
+        String token[];
+        Random rand = new Random();
+        int i = 0;
+        while (i != DATA_SIZE) {
+            int n = rand.nextInt(vertexList.size()) + 0;
+            int m = rand.nextInt(vertexList.size()) + 0;
+            if (!edges.contains(vertexList.get(n)+ " " +vertexList.get(m)) || !edges.contains(vertexList.get(m)+ " " +vertexList.get(n))) {
+                edges.add(vertexList.get(n)+ " " +vertexList.get(m));
+                i++;
+            }
+        }
+    }
+    
+    private void generateS() {
+        ArrayList<String> edges = new ArrayList<>();
+        generateEdges(edges);
+        printToFileData(S_SET, edges,"S");
+    }
+    
+    private void generateRE() {
+        ArrayList<String> edges = new ArrayList<>();
+        generateEdges(edges);
+        printToFileData(RE_SET, edges,"RE");
+    }
+    
+     private void generateRandAV() {
+         /*this doesn't go in generateVert becasue we want random ones to add*/
+        ArrayList<String> vert = new ArrayList<>();
+        String str;
+        String token[];
+        Random rand = new Random();
+        int i = 0;
+        while (i != DATA_SIZE) {
+            int n = rand.nextInt(10000) + 0;
+            if (!vert.contains(String.valueOf(n)) && !vertexList.contains(String.valueOf(n))) {
+                vert.add(String.valueOf(n));
+                i++;
+            }
+        }
+        printToFileData(AV_SET, vert,"AV");
+    }
+    
+    private void generateVert(List<String> vert) {
+        String str;
+        String token[];
+        Random rand = new Random();
+        int i = 0;
+        while (i != DATA_SIZE) {
+            int n = rand.nextInt(10000) + 0;
+            if (vertexList.contains(String.valueOf(n)) && !vert.contains(String.valueOf(n))) {
+                vert.add(String.valueOf(n));
+                i++;
+            }
+        }
+    }
+    
+    private void generateRV() {
+        ArrayList<String> vert = new ArrayList<>();
+        generateVert(vert);
+        printToFileData(RV_SET, vert,"RV");
+    }
+
+    private void generateN() {
+        ArrayList<String> vert = new ArrayList<>();
+        generateVert(vert);
+        printToFileData(N_SET, vert,"N");
+    }
+    
+    private void printToFileData(String filename, List<String> printElement,String command) {
+        PrintWriter printWriter = null;
+        try {
+            printWriter = new PrintWriter(new FileOutputStream(filename));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (null != printWriter) {
+            for(String e : printElement) {
+                printWriter.println(command+" "+e);
+            }
+            printWriter.close();
+        }
+    }
+    
 }
