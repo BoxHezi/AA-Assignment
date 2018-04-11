@@ -58,7 +58,20 @@ public class GraphGenerator {
         }
 
         if (null != readFile) {
-            getVertex(readFile, vertexList);
+            String str;
+            String[] token;
+            int count = 0;
+            while ((str = readFile.nextLine()) != null) {
+                token = str.split("\\s");
+                String vertex = token[0];
+                if (!vertexList.contains(vertex)) {
+                    vertexList.add(vertex);
+                    count++;
+                }
+                if (count >= VERTEX_LIMIT) {
+                    break;
+                }
+            }
             System.out.println("Vertex Size: " + vertexList.size());
             readFile.close();
         }
@@ -94,24 +107,6 @@ public class GraphGenerator {
             }
         }
     }
-
-    private void getVertex(Scanner readFile, ArrayList<String> vert) {
-        String str;
-        String[] token;
-        int count = 0;
-        while ((str = readFile.nextLine()) != null) {
-            token = str.split("\\s");
-            String vertex = token[0];
-            if (!vert.contains(vertex)) {
-                vert.add(vertex);
-                count++;
-            }
-            if (count >= VERTEX_LIMIT) {
-                break;
-            }
-        }
-    }
-
 
     private void generateRE() {
         Scanner readFile = null;
