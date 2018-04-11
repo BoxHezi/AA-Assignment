@@ -7,7 +7,9 @@ import java.util.Scanner;
 
 public class GraphGenerator {
     private static final String BASE_GRAPH_FILE = "facebook_combined.txt";
-    private static final String BASE_TEST_GRAPH = "bash_graph.txt";
+    private static final String HD_TEST_GRAPH = "HD_base_graph.txt";
+    private static final String MD_TEST_GRAPH = "MD_base_graph.txt";
+    private static final String LD_TEST_GRAPH = "LD_base_graph.txt";
     private static final int HD_INDICATOR = 1;
     private static final int MD_INDICATOR = 2;
     private static final int LD_INDICATOR = 3;
@@ -18,10 +20,10 @@ public class GraphGenerator {
 
     public static void main(String[] args) {
         GraphGenerator graphGenerator = new GraphGenerator();
-        graphGenerator.generateBaseGraph();
+        graphGenerator.createGraphHD();
     }
 
-    private void generateBaseGraph() {
+    private void createGraphHD() {
         Scanner readFile = null;
         try {
             readFile = new Scanner(new File(BASE_GRAPH_FILE));
@@ -31,25 +33,58 @@ public class GraphGenerator {
 
         if (null != readFile) {
             String edge;
-            String[] token;
+//            String[] token;
+            int count = 0;
             while ((edge = readFile.nextLine()) != null) {
-                if (vertexList.size() >= VERTEX_LIMIT) {
+                if (count >= VERTEX_LIMIT) {
                     break;
                 }
                 edgeList.add(edge);
-                token = edge.split("\\s");
+                count++;
+                /*token = edge.split("\\s");
                 String vertex = token[0];
                 if (!vertexList.contains(vertex)) {
                     vertexList.add(vertex);
-                }
+                }*/
             }
-            System.out.println("BASE GRAPH GENERATE");
+            System.out.println("HD BASE GRAPH GENERATE!");
             readFile.close();
         }
-        printToFile(BASE_TEST_GRAPH, edgeList);
+        printToFile(HD_TEST_GRAPH, edgeList);
     }
 
-    private void createGraphHD() {
+    private void createGraphMD() {
+        Scanner readFile = null;
+        try {
+            readFile = new Scanner(new File(BASE_GRAPH_FILE));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (null != readFile) {
+            String edge;
+//            String token[];
+            int count = 0;
+            boolean addEdge = true;
+            while ((edge = readFile.nextLine()) != null) {
+                if (count >= VERTEX_LIMIT) {
+                    break;
+                }
+                if (addEdge) {
+                    edgeList.add(edge);
+                    addEdge = false;
+                } else {
+                    addEdge = true;
+                }
+                count++;
+            }
+            System.out.println("MD BASE GRAPH GENERATE!");
+            readFile.close();
+        }
+        printToFile(MD_TEST_GRAPH, edgeList);
+    }
+
+    private void createGraphLD() {
 
     }
 
