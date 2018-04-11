@@ -90,7 +90,42 @@ public class GraphGenerator {
     }
 
     private void createGraphLD() {
+        Scanner readFile = null;
+        try {
+            readFile = new Scanner(new File(BASE_GRAPH_FILE));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        if (null != readFile) {
+            String edge;
+            String token[];
+            boolean addEdge = true;
+            int addEdgeIndicator = LD_INDICATOR;
+            while ((edge = readFile.nextLine()) != null) {
+                if (vertexList.size() >= VERTEX_LIMIT) {
+                    break;
+                }
+                if (addEdge && addEdgeIndicator == LD_INDICATOR) {
+                    edgeList.add(edge);
+                }
+                addEdge = !addEdge;
+                addEdgeIndicator--;
+                if (addEdgeIndicator <= 0) {
+                    addEdgeIndicator = LD_INDICATOR;
+                }
+                token = edge.split("\\s");
+                String vertex = token[0];
+                if (!vertexList.contains(vertex)) {
+                    vertexList.add(vertex);
+                }
+            }
+            System.out.println("LD BASE GRAPH GENERATE!");
+            System.out.println(edgeList.size());
+            System.out.println(vertexList.size());
+            readFile.close();
+        }
+        printToFile(LD_TEST_GRAPH, edgeList);
     }
 
     private void printToFile(String filename, List<String> printElement) {
