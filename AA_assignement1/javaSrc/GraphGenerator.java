@@ -19,6 +19,7 @@ public class GraphGenerator {
 
     public static void main(String[] args) {
         scanFacebookFile();
+        generateAE();
     }
 
     /**
@@ -59,7 +60,7 @@ public class GraphGenerator {
 		
     }
 	
-	public void generateAE() {
+	public static void generateAE() {
 		Scanner readFile = null;
 
 		ArrayList<String> Edges = new ArrayList<>();
@@ -89,7 +90,8 @@ public class GraphGenerator {
 			    break;
 			}
 		    }
-		readfile.close();
+		}
+		readFile.close();
 		/*uses a randomizer to select random vertices to form edges then prints
 		it to the file AE*/ 
 		Random rand = new Random();
