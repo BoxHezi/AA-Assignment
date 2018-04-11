@@ -45,8 +45,8 @@ public class GraphGenerator {
                 }
                 token = str.split("\\s");
                 String vertex = token[0];
-                if (!tempVertexList.contains(vertex)) {
-                    tempVertexList.add(vertex);
+                if (!vertexList.contains(vertex)) {
+                    vertexList.add(vertex);
                 }
             }
             System.out.println(vertexList.size());
