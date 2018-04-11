@@ -16,6 +16,9 @@ public class GraphGenerator {
 	private static final String AE2_COMMAND_IN = "aeM.in";
 	private static final String AE3_COMMAND_IN = "aeL.in";
     private static final int vertexLimitation = 800;
+    private static final int E1Limitation = 12991;
+    private static final int E2Limitation = 6496;
+    private static final int E3Limitation = 3248;
 
     public static void main(String[] args) {
         scanFacebookFile();
@@ -102,11 +105,13 @@ public class GraphGenerator {
 			int m = rand.nextInt(vert.size()) + 0;
 			if (!Edges.contains(vert.get(n)+" "+vert.get(m)) && !Edges.contains(vert.get(m)+" "+vert.get(n))) {
 				Edges.add(vert.get(n)+" "+vert.get(m));
-				Edges.add(vert.get(m)+" "+vert.get(n));
 				i++;
 			}
 		}
-		printToFileAE(AE1_COMMAND_IN,Edges, "AE");
+		printToFileAE(AE1_COMMAND_IN,Edges, "AE",E1Limitation);
+        printToFileAE(AE2_COMMAND_IN,Edges, "AE",E2Limitation);
+        printToFileAE(AE3_COMMAND_IN,Edges, "AE",E3Limitation);
+        
 	}
 
     /**
@@ -136,7 +141,7 @@ public class GraphGenerator {
      * @param command command AV, AE, RV, RE, etc
 	 *
      */
-	private static void printToFileAE(String fileName,List<String>Edges, String command) {
+	private static void printToFileAE(String fileName,List<String>Edges, String command,int Limitation) {
 		PrintWriter printWriter = null;	
 		try {
 		    printWriter = new PrintWriter(new FileOutputStream(fileName));
@@ -144,7 +149,7 @@ public class GraphGenerator {
 		    e.printStackTrace();
 		}
 		int i=0;
-		while (i<Edges.size()) {
+		while (i<Limitation) {
 			printWriter.println(command + " " + Edges.get(i));
 			i++;
 		}
