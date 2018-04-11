@@ -48,6 +48,8 @@ public class GraphGenerator {
                 }
             }
             System.out.println("HD BASE GRAPH GENERATE!");
+            System.out.println(edgeList.size());
+            System.out.println(vertexList.size());
             readFile.close();
         }
         printToFile(HD_TEST_GRAPH, edgeList);
@@ -71,10 +73,8 @@ public class GraphGenerator {
                 }
                 if (addEdge) {
                     edgeList.add(edge);
-                    addEdge = false;
-                } else {
-                    addEdge = true;
                 }
+                addEdge = !addEdge;
                 token = edge.split("\\s");
                 String vertex = token[0];
                 if (!vertexList.contains(vertex)) {
@@ -82,6 +82,8 @@ public class GraphGenerator {
                 }
             }
             System.out.println("MD BASE GRAPH GENERATE!");
+            System.out.println(edgeList.size());
+            System.out.println(vertexList.size());
             readFile.close();
         }
         printToFile(MD_TEST_GRAPH, edgeList);
@@ -105,5 +107,7 @@ public class GraphGenerator {
             }
             printWriter.close();
         }
+        edgeList = new ArrayList<>();
+        vertexList = new ArrayList<>();
     }
 }
