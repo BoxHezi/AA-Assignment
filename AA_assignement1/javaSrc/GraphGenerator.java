@@ -56,8 +56,56 @@ public class GraphGenerator {
         }
         // output a AV command file
         printToFile(AV_COMMAND_IN, vertexList, "AV");
-		printToFileAE(AE1_COMMAND_IN, vertexList, "AE");
+		
     }
+	
+	public void generateAE() {
+		Scanner readFile = null;
+
+		ArrayList<String> Edges = new ArrayList<>();
+		
+		
+		ArrayList<String> vert = new ArrayList<>();
+		
+		try {
+		    readFile = new Scanner(new File(ORIGIN_DATE_FILE));
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+		String str;
+		String token[];
+		int count = 0;
+	//        int lineCounter = 0;
+		if (null != readFile) {
+		    while ((str = readFile.nextLine()) != null) {
+	//                lineCounter++;
+			token = str.split("\\s");
+			String vertex = token[0];
+			if (!vert.contains(vertex)) {
+			    vert.add(vertex);
+			    count++;
+			}
+			if (count >= vertexLimitation) {
+			    break;
+			}
+		    }
+		readfile.close();
+		/*uses a randomizer to select random vertices to form edges then prints
+		it to the file AE*/ 
+		Random rand = new Random();
+		int i = 0;
+			/*being 12991x2 = 25,982 edges....*/
+		while (i != 12991) {
+			int n = rand.nextInt(vert.size()) + 0;
+			int m = rand.nextInt(vert.size()) + 0;
+			if (!Edges.contains(vert.get(n)+" "+vert.get(m)) && !Edges.contains(vert.get(m)+" "+vert.get(n))) {
+				Edges.add(vert.get(n)+" "+vert.get(m));
+				Edges.add(vert.get(m)+" "+vert.get(n));
+				i++;
+			}
+		}
+		printToFileAE(AE1_COMMAND_IN,Edges, "AE");
+	}
 
     /**
      * @param fileName output file name
@@ -86,32 +134,20 @@ public class GraphGenerator {
      * @param command command AV, AE, RV, RE, etc
 	 *
      */
-	private static void printToFileAE(String fileName, List<String> vert, String command) {
-        PrintWriter printWriter = null;
-		ArrayList<String> Edges = new ArrayList<>();
-		
+	private static void printToFileAE(String fileName,List<String>Edges, String command) {
+		PrintWriter printWriter = null;	
 		try {
-            printWriter = new PrintWriter(new FileOutputStream(fileName));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-		/*uses a randomizer to select random vertices to form edges then prints
-		it to the file AE*/ 
-		Random rand = new Random();
-        int i = 0;
-		/*being 12991x2 = 25,982 edges....*/
-        while (i != 12991) {
-        	int n = rand.nextInt(vert.size()) + 0;
-			int m = rand.nextInt(vert.size()) + 0;
-			if (!Edges.contains(vert.get(n)+" "+vert.get(m)) && !Edges.contains(vert.get(m)+" "+vert.get(n))) {
-				Edges.add(vert.get(n)+" "+vert.get(m));
-                printWriter.println(command + " " + Edges.get(i));
-				printWriter.println(command + " " + vert.get(m)+" "+vert.get(n));
-                i++;
-			}
-        }
+		    printWriter = new PrintWriter(new FileOutputStream(fileName));
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+		int i=0;
+		while (i<Edges.size()) {
+			printWriter.println(command + " " + Edges.get(i));
+			i++;
+		}
 		printWriter.close();
-    }
+	    }
 	
 	private static void printToFileRE(String fileName, List<String> Edges, String command) {
         //TODO
