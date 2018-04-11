@@ -21,6 +21,8 @@ public class GraphGenerator {
     public static void main(String[] args) {
         GraphGenerator graphGenerator = new GraphGenerator();
         graphGenerator.createGraphHD();
+        graphGenerator.createGraphMD();
+        graphGenerator.createGraphLD();
     }
 
     private void createGraphHD() {
@@ -33,19 +35,17 @@ public class GraphGenerator {
 
         if (null != readFile) {
             String edge;
-//            String[] token;
-            int count = 0;
+            String[] token;
             while ((edge = readFile.nextLine()) != null) {
-                if (count >= VERTEX_LIMIT) {
+                if (vertexList.size() >= VERTEX_LIMIT) {
                     break;
                 }
                 edgeList.add(edge);
-                count++;
-                /*token = edge.split("\\s");
+                token = edge.split("\\s");
                 String vertex = token[0];
                 if (!vertexList.contains(vertex)) {
                     vertexList.add(vertex);
-                }*/
+                }
             }
             System.out.println("HD BASE GRAPH GENERATE!");
             readFile.close();
@@ -63,11 +63,10 @@ public class GraphGenerator {
 
         if (null != readFile) {
             String edge;
-//            String token[];
-            int count = 0;
+            String token[];
             boolean addEdge = true;
             while ((edge = readFile.nextLine()) != null) {
-                if (count >= VERTEX_LIMIT) {
+                if (vertexList.size() >= VERTEX_LIMIT) {
                     break;
                 }
                 if (addEdge) {
@@ -76,7 +75,11 @@ public class GraphGenerator {
                 } else {
                     addEdge = true;
                 }
-                count++;
+                token = edge.split("\\s");
+                String vertex = token[0];
+                if (!vertexList.contains(vertex)) {
+                    vertexList.add(vertex);
+                }
             }
             System.out.println("MD BASE GRAPH GENERATE!");
             readFile.close();
