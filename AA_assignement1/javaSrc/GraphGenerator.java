@@ -14,15 +14,21 @@ public class GraphGenerator {
     private static final String AE_SET = "AE_SET.in";
     private static final String AV_SET = "AV_SET.in";
     private static final String RE_SET = "RE_SET.in";
+	private static final String REmd_SET = "REmd_SET.in";
     private static final String RV_SET = "RV_SET.in";
     private static final String N_SET = "N_SET.in";
     private static final String S_SET = "S_SET.in";
+	private static final String Smd_SET = "Smd_SET.in";
     private static final int LD_INDICATOR = 3;
     private static final int VERTEX_LIMIT = 500;
     private static final int DATA_SIZE = 200;
 
     // store all 500 vertices in this list
     private ArrayList<String> vertexList = new ArrayList<>();
+	private ArrayList<String> GlobalLD = new ArrayList<>();
+	private ArrayList<String> GlobalLDvert = new ArrayList<>();
+	private ArrayList<String> GlobalMD = new ArrayList<>();
+	private ArrayList<String> GlobalMDvert = new ArrayList<>();
     // need to clean list after generate different density graph
     private ArrayList<String> tempVertexList = new ArrayList<>();
     private ArrayList<String> tempEdgeList = new ArrayList<>();
@@ -119,14 +125,17 @@ public class GraphGenerator {
                 }
                 if (addEdge) {
                     tempEdgeList.add(edge);
+					GlobalMD.add(edge);
                     token = edge.split("\\s");
                     String vertex1 = token[0];
                     String vertex2 = token[1];
                     if (!tempVertexList.contains(vertex1)) {
                         tempVertexList.add(vertex1);
+						GlobalMDvert.add(vertex1);
                     }
                     if (!tempVertexList.contains(vertex2)) {
                         tempVertexList.add(vertex2);
+						GlobalMDvert.add(vertex2);
                     }
                 }
                 addEdge = !addEdge;
@@ -156,14 +165,17 @@ public class GraphGenerator {
                 }
                 if (addEdge && addEdgeIndicator == LD_INDICATOR) {
                     tempEdgeList.add(edge);
+					GlobalLD.add(edge);
                     token = edge.split("\\s");
                     String vertex1 = token[0];
                     String vertex2 = token[1];
                     if (!tempVertexList.contains(vertex1)) {
                         tempVertexList.add(vertex1);
+						GlobalLDvert.add(vertex1);
                     }
                     if (!tempVertexList.contains(vertex2)) {
                         tempVertexList.add(vertex2);
+						GlobalLDvert.add(vertex2);
                     }
                 }
                 addEdge = !addEdge;
@@ -215,29 +227,47 @@ public class GraphGenerator {
         printToFileData(AE_SET, edges, "AE");
     }
 
-    private void generateEdges(List<String> edges) {
+    private void generateS() {
+        ArrayList<String> edges = new ArrayList<>();
+		ArrayList<String> edges2 = new ArrayList<>();
         Random rand = new Random();
         int i = 0;
         while (i <= DATA_SIZE) {
-            int n = rand.nextInt(vertexList.size());
-            int m = rand.nextInt(vertexList.size());
-            if (!edges.contains(vertexList.get(n) + " " + vertexList.get(m)) || !edges.contains(vertexList.get(m) + " " + vertexList.get(n))) {
-                edges.add(vertexList.get(n) + " " + vertexList.get(m));
-                i++;
-            }
+            int n = rand.nextInt(GlobalLDvert.size());
+            int m = rand.nextInt(GlobalLDvert.size());
+			if (!edges.contains(GlobalLDvert.get(n) + " " + GlobalLDvert.get(m)) || !edges.contains(GlobalLDvert.get(m) + " " + GlobalLDvert.get(n)) && !edges.contains(GlobalMDvert.get(n) + " " + GlobalMDvert.get(m)) || !edges.contains(GlobalMDvert.get(m) + " " + GlobalMDvert.get(n))) {
+				if (!edges.contains(GlobalLDvert.get(n) + " " + GlobalLDvert.get(m)) || !edges.contains(GlobalLDvert.get(m) + " " + GlobalLDvert.get(n)) ) {
+					edges.add(GlobalLDvert.get(n) + " " + GlobalLDvert.get(m));
+				}
+				if (!edges.contains(GlobalMDvert.get(n) + " " + GlobalMDvert.get(m)) || !edges.contains(GlobalMDvert.get(m) + " " + GlobalMDvert.get(n))) {
+					edges2.add(GlobalMDvert.get(n) + " " + GlobalMDvert.get(m));
+				}
+				i++;
+			}
         }
-    }
-
-    private void generateS() {
-        ArrayList<String> edges = new ArrayList<>();
-        generateEdges(edges);
         printToFileData(S_SET, edges, "S");
+		printToFileData(Smd_SET, edges2, "S");
     }
 
     private void generateRE() {
         ArrayList<String> edges = new ArrayList<>();
-        generateEdges(edges);
+		ArrayList<String> edges2 = new ArrayList<>();
+        Random rand = new Random();
+        int i = 0;
+        while (i <= DATA_SIZE) {
+            int n = rand.nextInt(GlobalLDvert.size());
+			if (!edges.contains(GlobalLD.get(n)) || !edges.contains(GlobalMD.get(n))) {
+				if (!edges.contains(GlobalLD.get(n))) {
+					edges.add(GlobalLD.get(n));
+				}
+				if (!edges.contains(GlobalMD.get(n))) {
+					edges2.add(GlobalMD.get(n));
+				}
+				i++;
+			}
+        }
         printToFileData(RE_SET, edges, "RE");
+		printToFileData(REmd_SET, edges2, "RE");
     }
 
     private void generateRandAV() {
@@ -260,7 +290,7 @@ public class GraphGenerator {
         int i = 0;
         while (i <= DATA_SIZE) {
             int n = rand.nextInt(10000);
-            if (vertexList.contains(String.valueOf(n)) && !vert.contains(String.valueOf(n))) {
+            if (GlobalLDvert.contains(String.valueOf(n)) && !vert.contains(String.valueOf(n)) && GlobalMDvert.contains(String.valueOf(n))) {
                 vert.add(String.valueOf(n));
                 i++;
             }
