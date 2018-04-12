@@ -81,7 +81,7 @@ public class GraphTester
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Advert.write(""+String.format("%07f",(System.nanoTime() - startTimeAV)/1000000)+"\n");
+						Advert.write(""+(System.nanoTime() - startTimeAV)/1000000+"\n");
 						Advert.close();
 						break;
 	                // add edge
@@ -93,7 +93,7 @@ public class GraphTester
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Adedge.write(""+String.format("%07f",(System.nanoTime() - startTimeAE)/1000000)+"\n");
+						Adedge.write(""+(System.nanoTime() - startTimeAE)/1000000+"\n");
 						Adedge.close();
 						break;                                    
 					// neighbourhood
@@ -111,7 +111,7 @@ public class GraphTester
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Neigh.write(""+String.format("%07f",(System.nanoTime() - startTimeN)/1000000)+"\n");
+						Neigh.write(""+(System.nanoTime() - startTimeN)/1000000+"\n");
 						Neigh.close();
 						break;
 					// remove vertex
@@ -123,7 +123,7 @@ public class GraphTester
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Revert.write(""+String.format("%07f",(System.nanoTime() - startTimeRV)/1000000)+"\n");
+						Revert.write(""+(System.nanoTime() - startTimeRV)/1000000+"\n");
 						Revert.close();
 						break;
 					// remove edge
@@ -135,7 +135,7 @@ public class GraphTester
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Reedge.write(""+String.format("%07f",(System.nanoTime() - startTimeRE)/1000000)+"\n");
+						Reedge.write(""+(System.nanoTime() - startTimeRE)/1000000+"\n");
 						Reedge.close();
 						break;		
 					// compute shortest path distance
@@ -147,7 +147,7 @@ public class GraphTester
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Sroute.write(""+String.format("%07f",(System.nanoTime() - startTimeS)/1000000)+"\n");
+						Sroute.write(""+(System.nanoTime() - startTimeS)/1000000+"\n");
 						Sroute.close();
 						break;							
 					// print vertices
