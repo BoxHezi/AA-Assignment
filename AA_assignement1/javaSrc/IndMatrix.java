@@ -73,6 +73,10 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 
     public void addEdge(T srcLabel, T tarLabel) {
         // Implement me!
+		if (!vert.contains(srcLabel) && !vert.contains(tarLabel) ) {
+			System.out.println("no such vertex");
+			return;
+		}
 		if (src.contains(srcLabel) && tar.contains(tarLabel)) {
 			if (src.indexOf(srcLabel) == tar.indexOf(tarLabel)) {
 				return;
@@ -190,11 +194,11 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
         // Implement me!
         int distance = 0;
+		int distance2 = 0;
         int j = 0;
         boolean exists = false;
         String findtar = vertLabel2.toString();
         String findsrc = vertLabel1.toString();
-        String[] visited = new String[src.size()];
 
         for (int i = 0; i < tar.size(); i++) {
             if (grapher[0][i + 1].contains(vertLabel2.toString())) {
@@ -203,40 +207,44 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
             if (grapher[0][i + 1].contains(vertLabel2.toString()) && grapher[0][i + 1].contains(vertLabel1.toString())) {
                 return 1;
             }
-            visited[i] = "0";
         }
-        if (exists != false) {
-            while (true) {
-                if (tar.get(j).toString().equals(findsrc)) {
-                    findsrc = src.get(j).toString();
-                    distance++;
-                } else if (src.get(j).toString().equals(findsrc)) {
-                    findsrc = tar.get(j).toString();
-                    distance++;
-                }
-                if (grapher[0][j + 1].contains(vertLabel2.toString()) && grapher[0][j + 1].contains(findsrc)) {
-                    return distance;
-                }
-                if (tar.get(j).toString().equals(findsrc) || src.get(j).toString().equals(findsrc)) {
-                    if (visited[j] == "0") {
-                        visited[j] = grapher[0][j + 1];
-                    } else if (visited[j].equals(grapher[0][j + 1])) {
-                        for (int p = 0; p < src.size(); p++) {
-                            visited[p] = "0";
-                        }
-                        j = -1;
-                        /*System.out.println("EMPTY");*/
-                        distance = -1;
-                    }
-                }
-                j++;
-                if (j >= src.size()) {
-                    j = 0;
-                }
-            }
-        }
+		ArrayList<T> neighbours = new ArrayList<>();
+		ArrayList<T> target = new ArrayList<>();
+		ArrayList<T> source = new ArrayList<>();
+		while (true) {
+			for (int i=0; i<src.size();i++) {
+				if (src.get(i).equals(findsrc)) {
+					target.add(tar.get(i));
+					if (!neighbours.contains(tar.get(i))) {
+						neighbours.add(tar.get(i));
+						distance++;
+					} else if (distance >1 ){
+						distance--;	
+					}
+					if (tar.get(i).equals(vertLabel2)) {
+							return distance;
+					}
+					findsrc = tar.get(i).toString();
+				}  else if (tar.get(i).equals(findsrc)) {
+					source.add(src.get(i));
+					if (!neighbours.contains(src.get(i))) {
+						neighbours.add(src.get(i));
+						distance++;
+					} else if (distance > 1) {
+						distance--;	
+					}
+					if (src.get(i).equals(vertLabel2)) {
+							return distance;
+					}
+					findsrc = src.get(i).toString();
+				}
+			}
+			j++;
+			if (j >=50) {
+               break;
+           }
+		}
         // if we reach this point, source and target are disconnected
         return disconnectedDist;
     } // end of shortestPathDistance()
-
 } // end of class IndMatrix
