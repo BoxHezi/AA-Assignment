@@ -187,6 +187,7 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
 
         if (!existVertex(vertLabel1) || !existVertex(vertLabel2)) {
             System.err.println("One of the vertex doesn't existed!");
+            return disconnectedDist;
         }
 
         boolean found = false;
@@ -203,7 +204,6 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
                 queue.add(vertex.get(i));
             }
         }
-
         while (!found) {
             shortestPath++;
             if (queue.size() == 0) {
@@ -212,8 +212,10 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
                 if (queue.contains(vertLabel2)) {
                     found = true;
                 } else {
-                    for (int j = 0; j < queue.size(); j++) {
-                        visitedList.add(vertex.get(j));
+                    for (int j = 0; j < queue.size() && j < matrix.length; j++) {
+                        if (!visitedList.contains(queue.get(j))) {
+                            visitedList.add(queue.get(j));
+                        }
                         for (int x = 0; x < matrix[j].length; x++) {
                             if (matrix[j][x] == 1 && !visitedList.contains(vertex.get(x))) {
                                 nextQueue.add(vertex.get(x));
