@@ -24,8 +24,7 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
     /**
      * Contructs empty graph.
      */
-    private ArrayList<T> src = new ArrayList<>();
-    private ArrayList<T> tar = new ArrayList<>();
+    private ArrayList<String> edges = new ArrayList<>();
     private ArrayList<T> vert = new ArrayList<>();
     private String[][] grapher;
 
@@ -43,27 +42,29 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 
     public void addVertex(T vertLabel) {
         // Implement me!
-        if (vert.contains(vertLabel)) {
+        if (edges.contains(vertLabel.toString())) {
             return;
         }
-
+		if (vert.contains(vertLabel)) {
+            return;
+        }
         vert.add(vertLabel);
         addtoMatrix();
         setMatrix();
     } // end of addVertex()
 
     public void addtoMatrix() {
-        grapher = new String[vert.size() + 1][src.size() + 1];
-        if (vert.size() > src.size()) {
+        grapher = new String[vert.size() + 1][edges.size() + 1];
+        if (vert.size() > edges.size()) {
             for (int i = 0; i < vert.size(); i++) {
                 grapher[i + 1][0] = vert.get(i).toString();
-                if (i < src.size()) {
-                    grapher[0][i + 1] = src.get(i).toString() + " " + tar.get(i).toString();
+                if (i < edges.size()) {
+                    grapher[0][i + 1] = edges.get(i);
                 }
             }
         } else {
-            for (int i = 0; i < src.size(); i++) {
-                grapher[0][i + 1] = src.get(i).toString() + " " + tar.get(i).toString();
+            for (int i = 0; i < edges.size(); i++) {
+                grapher[0][i + 1] = edges.get(i);
                 if (i < vert.size()) {
                     grapher[i + 1][0] = vert.get(i).toString();
                 }
@@ -77,23 +78,18 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 			System.out.println("no such vertex");
 			return;
 		}
-		if (src.contains(srcLabel) && tar.contains(tarLabel)) {
-			if (src.indexOf(srcLabel) == tar.indexOf(tarLabel)) {
-				return;
-			}
+		if (edges.contains(srcLabel.toString()) && edges.contains(tarLabel.toString())) {
+			return;
 		}
-        /*row*/
-        src.add(srcLabel);
-        /*Column*/
-        tar.add(tarLabel);
+		edges.add(srcLabel+" "+tarLabel);
         addtoMatrix();
         setMatrix();
     } // end of addEdge()
 
     public void setMatrix() {
         grapher[0][0] = "";
-        for (int j = 0; j < tar.size(); j++) {
-            if (grapher[0][j + 1].contains(src.get(j).toString()) && grapher[0][j + 1].contains(tar.get(j).toString())) {
+        for (int j = 0; j < edges.size(); j++) {
+            if (grapher[0][j + 1].contains(edges.get(j))) {
                 for (int x = 0; x < vert.size(); x++) {
                     if (grapher[x + 1][0].contains(vert.get(x).toString()) && grapher[0][j + 1].contains(vert.get(x).toString())) {
                         grapher[x + 1][j + 1] = "1";
@@ -109,38 +105,35 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
         ArrayList<T> neighbours = new ArrayList<T>();
 
         // Implement me!
-        for (int i = 0; i < src.size(); i++) {
-            if (src.get(i).equals(vertLabel)) {
-                neighbours.add(tar.get(i));
-            }
-            if (tar.get(i).equals(vertLabel)) {
-                neighbours.add(src.get(i));
-            }
-        }
+		for (int j = 0; j < edges.size(); j++) {
+			if (grapher[0][j+1].contains(vertLabel.toString()) && grapher[vert.indexOf(vertLabel)+1][j+1] == "1") {
+				String token[];
+				token = grapher[0][j+1].split(" ");
+				if (!token[0].equals(vertLabel.toString()) && !neighbours.contains(token[0])) {
+					neighbours.add(vert.get(vert.indexOf(token[0])));
+				} else if (!token[1].equals(vertLabel.toString()) && !neighbours.contains(token[1])) {
+					neighbours.add(vert.get(vert.indexOf(token[1])));
+				}
+				
+			}
+		}
         return neighbours;
     } // end of neighbours()
 
 
     public void removeVertex(T vertLabel) {
         // Implement me!
-        boolean empty = false;
-        if (grapher.length == 0) {
-            empty = true;
+        if (vert.indexOf(vertLabel) == -1) {
             return;
         }
         if (vert.contains(vertLabel)) {
             vert.remove(vert.indexOf(vertLabel));
-            for (int x = 0; x < src.size(); x++) {
-                if (src.contains(vertLabel) || tar.contains(vertLabel)) {
-                    if (src.get(x).equals(vertLabel) || tar.get(x).equals(vertLabel)) {
-                        src.remove(x);
-                        tar.remove(x);
+            for (int x = 0; x < edges.size(); x++) {
+                if (edges.get(x).contains(vertLabel.toString())) {
+                        edges.remove(x);
                         /*rearrange*/
                         addtoMatrix();
                         setMatrix();
-                    }
-                } else {
-                    return;
                 }
             }
         }
@@ -149,18 +142,15 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 
     public void removeEdge(T srcLabel, T tarLabel) {
         // Implement me!
-        for (int i = 0; i < src.size(); i++) {
-            if (grapher[0][i + 1].contains(srcLabel.toString()) && grapher[0][i + 1].contains(tarLabel.toString())) {
+        for (int i = 0; i < edges.size(); i++) {
+            if (grapher[0][i + 1].contains(tarLabel.toString()) && grapher[0][i + 1].contains(srcLabel.toString())) {
                 grapher[0][i + 1] = "0";
-                src.remove(i);
-                tar.remove(i);
+                edges.remove(i);
                 /*sort in order*/
                 addtoMatrix();
                 setMatrix();
-                return;
             }
         }
-        System.out.println("Failed to remove edge : " + srcLabel.toString() + " " + tarLabel.toString());
     } // end of removeEdges()
 
 
@@ -175,15 +165,17 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 
 
     public void printEdges(PrintWriter os) {
-        for (int i = 0; i < src.size(); i++) {
-            os.print(grapher[0][i + 1].toString() + " \n");
-            os.print(tar.get(i) + " " + src.get(i) + "\n");
+		String token[];
+        for (int i = 0; i < edges.size(); i++) {
+			token = grapher[0][i + 1].split(" ");
+			os.print(token[1] + " " + token[0] + " \n");
+			os.print(token[0] + " " + token[1] + " \n");
         }
         os.flush();
 		/*TESTS FOR CHECKING MATRIX
 		for (int i =0; i <vert.size()+1;i++) {
 			
-			for(int j =0; j <tar.size()+1;j++) {
+			for(int j =0; j <edges.size()+1;j++) {
 				System.out.print(grapher[i][j]);
 			}
 			System.out.println();	
@@ -194,13 +186,12 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
         // Implement me!
         int distance = 0;
-		int distance2 = 0;
-        int j = 0;
+        int x = 0;
         boolean exists = false;
         String findtar = vertLabel2.toString();
         String findsrc = vertLabel1.toString();
 
-        for (int i = 0; i < tar.size(); i++) {
+        for (int i = 0; i < edges.size(); i++) {
             if (grapher[0][i + 1].contains(vertLabel2.toString())) {
                 exists = true;
             }
@@ -208,39 +199,27 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
                 return 1;
             }
         }
-		ArrayList<T> neighbours = new ArrayList<>();
-		ArrayList<T> target = new ArrayList<>();
-		ArrayList<T> source = new ArrayList<>();
-		while (true) {
-			for (int i=0; i<src.size();i++) {
-				if (src.get(i).equals(findsrc)) {
-					target.add(tar.get(i));
-					if (!neighbours.contains(tar.get(i))) {
-						neighbours.add(tar.get(i));
+		ArrayList<String> neighbours = new ArrayList<>();
+		String token[];
+		while (exists) {
+			for (int i=0; i<vert.size();i++) {
+				for (int j=0; j<edges.size();j++) {
+					if (grapher[i+1][j+1] == "1" && grapher[0][j+1].contains(findsrc)) {
 						distance++;
-					} else if (distance >1 ){
-						distance--;	
-					}
-					if (tar.get(i).equals(vertLabel2)) {
+						token = grapher[0][j+1].split(" ");
+						if (!token[1].equals(findsrc)) {
+							findsrc = token[1]; 
+						} else {
+							findsrc = token[0]; 
+						}
+						if (grapher[0][j+1].equals(findsrc+" "+findtar) || findsrc.equals(findtar)) {
 							return distance;
+						}
 					}
-					findsrc = tar.get(i).toString();
-				}  else if (tar.get(i).equals(findsrc)) {
-					source.add(src.get(i));
-					if (!neighbours.contains(src.get(i))) {
-						neighbours.add(src.get(i));
-						distance++;
-					} else if (distance > 1) {
-						distance--;	
-					}
-					if (src.get(i).equals(vertLabel2)) {
-							return distance;
-					}
-					findsrc = src.get(i).toString();
 				}
 			}
-			j++;
-			if (j >=50) {
+			x++;
+			if (x >=50) {
                break;
            }
 		}
