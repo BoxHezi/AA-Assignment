@@ -74,31 +74,31 @@ public class GraphTester
 				switch (command.toUpperCase()) {
 					// add vertex
 					case "AV":
-						float startTimeAV = System.nanoTime();
+						long startTimeAV = System.nanoTime();
 						if (tokens.length == 2) {
 							graph.addVertex(tokens[1]);
 						}
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Advert.write(""+(System.nanoTime() - startTimeAV)/1000000+"\n");
+						Advert.write(""+(System.nanoTime() - startTimeAV)+"\n");
 						Advert.close();
 						break;
 	                // add edge
 					case "AE":
-						float startTimeAE = System.nanoTime();
+						long startTimeAE = System.nanoTime();
 						if (tokens.length == 3) {
 							graph.addEdge(tokens[1], tokens[2]);
 						}
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Adedge.write(""+(System.nanoTime() - startTimeAE)/1000000+"\n");
+						Adedge.write(""+(System.nanoTime() - startTimeAE)+"\n");
 						Adedge.close();
 						break;                                    
 					// neighbourhood
 					case "N":
-						float startTimeN = System.nanoTime();
+						long startTimeN = System.nanoTime();
 						if (tokens.length == 2) {
 							ArrayList<String> neighbours = graph.neighbours(tokens[1]);
 							StringBuffer buf = new StringBuffer();
@@ -111,43 +111,43 @@ public class GraphTester
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Neigh.write(""+(System.nanoTime() - startTimeN)/1000000+"\n");
+						Neigh.write(""+(System.nanoTime() - startTimeN)+"\n");
 						Neigh.close();
 						break;
 					// remove vertex
 					case "RV":
-						float startTimeRV = System.nanoTime();
+						long startTimeRV = System.nanoTime();
 						if (tokens.length == 2) {
 							graph.removeVertex(tokens[1]);
 						}
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Revert.write(""+(System.nanoTime() - startTimeRV)/1000000+"\n");
+						Revert.write(""+(System.nanoTime() - startTimeRV)+"\n");
 						Revert.close();
 						break;
 					// remove edge
 					case "RE":
-						float startTimeRE = System.nanoTime();
+						long startTimeRE = System.nanoTime();
 						if (tokens.length == 3) {
 							graph.removeEdge(tokens[1], tokens[2]);
 						}
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Reedge.write(""+(System.nanoTime() - startTimeRE)/1000000+"\n");
+						Reedge.write(""+(System.nanoTime() - startTimeRE)+"\n");
 						Reedge.close();
 						break;		
 					// compute shortest path distance
 					case "S":
-						float startTimeS = System.nanoTime();
+						long startTimeS = System.nanoTime();
 						if (tokens.length == 3) {
 							distanceOutWriter.println(tokens[1] + " " + tokens[2] + " " + graph.shortestPathDistance(tokens[1], tokens[2]));
 						}
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Sroute.write(""+(System.nanoTime() - startTimeS)/1000000+"\n");
+						Sroute.write(""+(System.nanoTime() - startTimeS)+"\n");
 						Sroute.close();
 						break;							
 					// print vertices
