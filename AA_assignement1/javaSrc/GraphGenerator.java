@@ -12,11 +12,14 @@ public class GraphGenerator {
     private static final String MD_TEST_GRAPH = "MD_base_graph.txt";
     private static final String LD_TEST_GRAPH = "LD_base_graph.txt";
     private static final String AE_SET = "AE_SET.in";
+	private static final String AEmd_SET = "AEmd_SET.in";
     private static final String AV_SET = "AV_SET.in";
     private static final String RE_SET = "RE_SET.in";
 	private static final String REmd_SET = "REmd_SET.in";
     private static final String RV_SET = "RV_SET.in";
+	private static final String RVmd_SET = "RVmd_SET.in";
     private static final String N_SET = "N_SET.in";
+	private static final String Nmd_SET = "Nmd_SET.in";
     private static final String S_SET = "S_SET.in";
 	private static final String Smd_SET = "Smd_SET.in";
     private static final int LD_INDICATOR = 3;
@@ -212,19 +215,28 @@ public class GraphGenerator {
     private void generateRandAE() {
         /*this doesn't go in generateEdges becasue we want random ones to add*/
         ArrayList<String> edges = new ArrayList<>();
+		ArrayList<String> edges2 = new ArrayList<>();
         Random rand = new Random();
         int i = 0;
         while (i <= DATA_SIZE) {
-            int n = rand.nextInt(vertexList.size());
-            int m = rand.nextInt(vertexList.size());
-            if (!vertexList.contains(String.valueOf(n) + " " + String.valueOf(m)) || !vertexList.contains(String.valueOf(m) + " " + String.valueOf(n))) {
-                if (!edges.contains(String.valueOf(n) + " " + String.valueOf(m)) || !edges.contains(String.valueOf(m) + " " + String.valueOf(n))) {
-                    edges.add(n + " " + m);
-                    i++;
-                }
+            int n = rand.nextInt(GlobalLDvert.size());
+            int m = rand.nextInt(GlobalLDvert.size());
+            if (!GlobalLDvert.contains(String.valueOf(n) + " " + String.valueOf(m)) || !GlobalLDvert.contains(String.valueOf(m) + " " + String.valueOf(n)) && !GlobalMDvert.contains(String.valueOf(n) + " " + String.valueOf(m)) || !GlobalMDvert.contains(String.valueOf(m) + " " + String.valueOf(n)) ) {
+                if (!GlobalLDvert.contains(String.valueOf(n) + " " + String.valueOf(m)) || !GlobalLDvert.contains(String.valueOf(m) + " " + String.valueOf(n))) {
+					if (!edges.contains(String.valueOf(n) + " " + String.valueOf(m)) || !edges.contains(String.valueOf(m) + " " + String.valueOf(n))) {
+						edges.add(n + " " + m);
+                	}
+				}
+				if (!GlobalMDvert.contains(String.valueOf(n) + " " + String.valueOf(m)) || !GlobalMDvert.contains(String.valueOf(m) + " " + String.valueOf(n))) {
+					if (!edges2.contains(String.valueOf(n) + " " + String.valueOf(m)) || !edges2.contains(String.valueOf(m) + " " + String.valueOf(n))) {
+						edges2.add(n + " " + m);
+                	}
+				}
+				i++;
             }
         }
         printToFileData(AE_SET, edges, "AE");
+		printToFileData(AEmd_SET, edges2, "AE");
     }
 
     private void generateS() {
@@ -256,14 +268,21 @@ public class GraphGenerator {
         int i = 0;
         while (i <= DATA_SIZE) {
             int n = rand.nextInt(GlobalLDvert.size());
-			if (!edges.contains(GlobalLD.get(n)) || !edges.contains(GlobalMD.get(n))) {
+			if (!edges.contains(GlobalLD.get(n))) {
 				if (!edges.contains(GlobalLD.get(n))) {
 					edges.add(GlobalLD.get(n));
 				}
+				i++;
+			}
+        }
+		int j=0;
+		while (j <= DATA_SIZE) {
+            int n = rand.nextInt(GlobalLDvert.size());
+			if (!edges.contains(GlobalMD.get(n))) {
 				if (!edges.contains(GlobalMD.get(n))) {
 					edges2.add(GlobalMD.get(n));
 				}
-				i++;
+				j++;
 			}
         }
         printToFileData(RE_SET, edges, "RE");
@@ -299,14 +318,58 @@ public class GraphGenerator {
 
     private void generateRV() {
         ArrayList<String> vert = new ArrayList<>();
-        generateVert(vert);
+		ArrayList<String> vert2 = new ArrayList<>();
+        Random rand = new Random();
+        int i = 0;
+        while (i <= DATA_SIZE) {
+            int n = rand.nextInt(10000);
+            if (GlobalLDvert.contains(String.valueOf(n)) && !vert.contains(String.valueOf(n)) ) {
+				if (GlobalLDvert.contains(String.valueOf(n))) {
+					vert.add(String.valueOf(n));
+				}
+                i++;
+            }
+        }
+		int j=0;
+		while (j <= DATA_SIZE) {
+            int n = rand.nextInt(10000);
+            if (!vert2.contains(String.valueOf(n)) && GlobalMDvert.contains(String.valueOf(n))) {
+                if (GlobalMDvert.contains(String.valueOf(n))) {
+					vert2.add(String.valueOf(n));
+				}
+                j++;
+            }
+        }
         printToFileData(RV_SET, vert, "RV");
+		printToFileData(RVmd_SET, vert2, "RV");
     }
 
     private void generateN() {
         ArrayList<String> vert = new ArrayList<>();
-        generateVert(vert);
+		ArrayList<String> vert2 = new ArrayList<>();
+		Random rand = new Random();
+       	int i = 0;
+        while (i <= DATA_SIZE) {
+            int n = rand.nextInt(10000);
+            if (GlobalLDvert.contains(String.valueOf(n)) && !vert.contains(String.valueOf(n)) ) {
+				if (GlobalLDvert.contains(String.valueOf(n))) {
+					vert.add(String.valueOf(n));
+				}
+                i++;
+            }
+        }
+		int j=0;
+		while (j <= DATA_SIZE) {
+            int n = rand.nextInt(10000);
+            if (!vert2.contains(String.valueOf(n)) && GlobalMDvert.contains(String.valueOf(n))) {
+                if (GlobalMDvert.contains(String.valueOf(n))) {
+					vert2.add(String.valueOf(n));
+				}
+                j++;
+            }
+        }
         printToFileData(N_SET, vert, "N");
+		printToFileData(Nmd_SET, vert2, "N");
     }
 
     private void printToFileData(String filename, List<String> printElement, String command) {
