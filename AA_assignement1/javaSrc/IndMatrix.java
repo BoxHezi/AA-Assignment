@@ -153,32 +153,53 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 
     public void removeVertex(T vertLabel) {
         // Implement me!
-        if (vert.indexOf(vertLabel) == -1) {
-            return;
-        }
-        vert.remove(vert.indexOf(vertLabel));
-        for (int x = 0; x < edges.size(); x++) {
-        	if (edges.get(x).contains(vertLabel.toString())) {
-            	edges.remove(x);
-                /*rearrange*/
-               	addtoMatrix();
-                setMatrix();
-            }
-       	}
+		boolean removed = false;
+		String token[];
+		if (vert.size() > edges.size()) {
+			for (int x = 0; x < vert.size(); x++) {
+				if (vert.get(x).equals(vertLabel)) {
+					vert.remove(x);
+					removed = true;
+				}
+				if (x<edges.size()) {
+					token = edges.get(x).split(" ");
+					if (token[0].equals(vertLabel.toString()) || token[1].equals(vertLabel.toString())) {
+						edges.remove(x);
+					}
+				}
+			}
+		} else {
+			for (int x = 0; x < edges.size(); x++) {
+				if (edges.get(x).contains(vertLabel.toString())) {
+						edges.remove(x);
+					}
+				if (x<vert.size()) {
+					if (vert.get(x).equals(vertLabel)) {
+					vert.remove(x);
+					removed =true;
+				}
+				}
+			}
+		}
+		if (removed == true) {
+			/*rearrange*/
+			addtoMatrix();
+			setMatrix();
+		}
     } // end of removeVertex()
 
 
     public void removeEdge(T srcLabel, T tarLabel) {
         // Implement me!
         for (int i = 0; i < edges.size(); i++) {
-            if (grapher[0][i + 1].contains(tarLabel.toString()) && grapher[0][i + 1].contains(srcLabel.toString())) {
+            if (grapher[0][i + 1].equals(tarLabel.toString()+" "+srcLabel.toString()) || grapher[0][i + 1].equals(srcLabel.toString()+" "+tarLabel.toString())) {
                 grapher[0][i + 1] = "0";
                 edges.remove(i);
-                /*sort in order*/
-                addtoMatrix();
-                setMatrix();
             }
         }
+		 /*sort in order*/
+         addtoMatrix();
+         setMatrix();
     } // end of removeEdges()
 
 
