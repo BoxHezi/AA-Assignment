@@ -76,18 +76,38 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 		boolean found1=false;
 		boolean found2=false;
 		String token[];
-		for (int i =0; i <edges.size() ; i++) {
-			if (vert.get(i).equals(srcLabel)) {
-				found1 = true;
+		if (edges.size() > vert.size()) {
+			for (int i =0; i <edges.size() ; i++) {
+				if (i < vert.size()) {
+					if (vert.get(i).equals(srcLabel)) {
+						found1 = true;
+					}
+					if (vert.get(i).equals(tarLabel)) {
+						found2=true;
+					}
+				}
+				token = edges.get(i).split(" ");
+				if (token[0].equals(srcLabel.toString()) && token[1].equals(tarLabel.toString()) || token[1].equals(srcLabel.toString()) && token[0].equals(tarLabel.toString()) ) {
+					return;
+				}
 			}
-			if (vert.get(i).equals(tarLabel)) {
-				found2=true;
-			}
-			token = edges.get(i).split(" ");
-			if (token[0].equals(srcLabel.toString()) && token[1].equals(tarLabel.toString()) || token[1].equals(srcLabel.toString()) && token[0].equals(tarLabel.toString()) ) {
-				return;
+		} else {
+			for (int i =0; i <vert.size() ; i++) {
+				if (vert.get(i).equals(srcLabel)) {
+					found1 = true;
+				}
+				if (vert.get(i).equals(tarLabel)) {
+					found2=true;
+				}
+				if (i < edges.size()) {
+					token = grapher[0][i+1].split(" ");
+					if (token[0].equals(srcLabel.toString()) && token[1].equals(tarLabel.toString()) || token[1].equals(srcLabel.toString()) && token[0].equals(tarLabel.toString()) ) {
+						return;
+					}
+				}
 			}
 		}
+		
 		if (found1==false || found2==false) {
 			return;
 		}
