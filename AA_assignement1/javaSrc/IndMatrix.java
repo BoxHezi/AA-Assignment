@@ -42,12 +42,11 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 
     public void addVertex(T vertLabel) {
         // Implement me!
-        if (edges.contains(vertLabel.toString())) {
-            return;
-        }
-		if (vert.contains(vertLabel)) {
-            return;
-        }
+		for (int i =0; i<vert.size();i++ ) {
+			if (vert.get(i).equals(vertLabel)) {
+				return;
+			}
+		}
         vert.add(vertLabel);
         addtoMatrix();
         setMatrix();
@@ -74,11 +73,22 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 
     public void addEdge(T srcLabel, T tarLabel) {
         // Implement me!
-		if (!vert.contains(srcLabel) && !vert.contains(tarLabel) ) {
-			System.out.println("no such vertex");
-			return;
+		boolean found1=false;
+		boolean found2=false;
+		String token[];
+		for (int i =0; i <edges.size() ; i++) {
+			if (vert.get(i).equals(srcLabel)) {
+				found1 = true;
+			}
+			if (vert.get(i).equals(tarLabel)) {
+				found2=true;
+			}
+			token = edges.get(i).split(" ");
+			if (token[0].equals(srcLabel.toString()) && token[1].equals(tarLabel.toString()) || token[1].equals(srcLabel.toString()) && token[0].equals(tarLabel.toString()) ) {
+				return;
+			}
 		}
-		if (edges.contains(srcLabel.toString()) && edges.contains(tarLabel.toString())) {
+		if (found1==false || found2==false) {
 			return;
 		}
 		edges.add(srcLabel+" "+tarLabel);
@@ -89,9 +99,9 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
     public void setMatrix() {
         grapher[0][0] = "";
         for (int j = 0; j < edges.size(); j++) {
-            if (grapher[0][j + 1].contains(edges.get(j))) {
+            if (grapher[0][j + 1].equals(edges.get(j))) {
                 for (int x = 0; x < vert.size(); x++) {
-                    if (grapher[x + 1][0].contains(vert.get(x).toString()) && grapher[0][j + 1].contains(vert.get(x).toString())) {
+                    if (grapher[x + 1][0].equals(vert.get(x).toString()) && grapher[0][j + 1].contains(vert.get(x).toString())) {
                         grapher[x + 1][j + 1] = "1";
                     } else {
                         grapher[x + 1][j + 1] = "0";
@@ -126,17 +136,15 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
         if (vert.indexOf(vertLabel) == -1) {
             return;
         }
-        if (vert.contains(vertLabel)) {
-            vert.remove(vert.indexOf(vertLabel));
-            for (int x = 0; x < edges.size(); x++) {
-                if (edges.get(x).contains(vertLabel.toString())) {
-                        edges.remove(x);
-                        /*rearrange*/
-                        addtoMatrix();
-                        setMatrix();
-                }
+        vert.remove(vert.indexOf(vertLabel));
+        for (int x = 0; x < edges.size(); x++) {
+        	if (edges.get(x).contains(vertLabel.toString())) {
+            	edges.remove(x);
+                /*rearrange*/
+               	addtoMatrix();
+                setMatrix();
             }
-        }
+       	}
     } // end of removeVertex()
 
 
