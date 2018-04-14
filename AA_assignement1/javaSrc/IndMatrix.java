@@ -44,6 +44,7 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
         // Implement me!
 		for (int i =0; i<vert.size();i++ ) {
 			if (vert.get(i).equals(vertLabel)) {
+				System.err.println("Vertex already exists");
 				return;
 			}
 		}
@@ -88,6 +89,7 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 				}
 				token = edges.get(i).split(" ");
 				if (token[0].equals(srcLabel.toString()) && token[1].equals(tarLabel.toString()) || token[1].equals(srcLabel.toString()) && token[0].equals(tarLabel.toString()) ) {
+					System.err.println("Edge already exists");
 					return;
 				}
 			}
@@ -102,6 +104,7 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 				if (i < edges.size()) {
 					token = grapher[0][i+1].split(" ");
 					if (token[0].equals(srcLabel.toString()) && token[1].equals(tarLabel.toString()) || token[1].equals(srcLabel.toString()) && token[0].equals(tarLabel.toString()) ) {
+						System.err.println("Edge already exists");
 						return;
 					}
 				}
@@ -109,6 +112,7 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 		}
 		
 		if (found1==false || found2==false) {
+			System.err.println("Vertices not found");
 			return;
 		}
 		edges.add(srcLabel+" "+tarLabel);
@@ -135,6 +139,7 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
         ArrayList<T> neighbours = new ArrayList<T>();
 
         // Implement me!
+		boolean exists = false;		
 		for (int j = 0; j < edges.size(); j++) {
 			if (grapher[0][j+1].contains(vertLabel.toString()) && grapher[vert.indexOf(vertLabel)+1][j+1] == "1") {
 				String token[];
@@ -144,8 +149,11 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 				} else if (!token[1].equals(vertLabel.toString()) && !neighbours.contains(token[1])) {
 					neighbours.add(vert.get(vert.indexOf(token[1])));
 				}
-				
+				exists =true;
 			}
+		}
+		if (exists == false) {
+			System.out.print("no vertex found: ");
 		}
         return neighbours;
     } // end of neighbours()
@@ -185,21 +193,29 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 			/*rearrange*/
 			addtoMatrix();
 			setMatrix();
+		} else {
+			System.err.println("failed to remove: vertLabel");	
 		}
     } // end of removeVertex()
 
 
     public void removeEdge(T srcLabel, T tarLabel) {
         // Implement me!
+		boolean removed = false;
         for (int i = 0; i < edges.size(); i++) {
             if (grapher[0][i + 1].equals(tarLabel.toString()+" "+srcLabel.toString()) || grapher[0][i + 1].equals(srcLabel.toString()+" "+tarLabel.toString())) {
                 grapher[0][i + 1] = "0";
                 edges.remove(i);
+				removed = true;
             }
         }
 		 /*sort in order*/
-         addtoMatrix();
-         setMatrix();
+		if (removed == true) {
+         	addtoMatrix();
+         	setMatrix();
+		} else {
+			System.err.println("Edge does not exists");	
+		}
     } // end of removeEdges()
 
 
@@ -234,23 +250,28 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
         // Implement me!
+		ArrayList<String> neighbours = new ArrayList<>();
         int distance = 0;
         int x = 0;
-        boolean exists = false;
+        boolean exists1 = false;
+		boolean exists2 = false;
         String findtar = vertLabel2.toString();
         String findsrc = vertLabel1.toString();
-
+		String token[];
+		
         for (int i = 0; i < edges.size(); i++) {
-            if (grapher[0][i + 1].contains(vertLabel2.toString())) {
-                exists = true;
+			token = grapher[0][i + 1].split(" ");
+            if (token[1].equals(vertLabel2.toString()) || token[0].equals(vertLabel1.toString())) {
+                exists1 = true;
             }
-            if (grapher[0][i + 1].contains(vertLabel2.toString()) && grapher[0][i + 1].contains(vertLabel1.toString())) {
+			if (token[1].equals(vertLabel2.toString()) || token[0].equals(vertLabel1.toString())) {
+				exists2 = true;
+			}
+            if (token[1].equals(vertLabel2.toString()) && token[0].equals(vertLabel1.toString()) || token[0].equals(vertLabel2.toString()) && token[1].equals(vertLabel1.toString())) {
                 return 1;
             }
         }
-		ArrayList<String> neighbours = new ArrayList<>();
-		String token[];
-		while (exists) {
+		while (exists1 && exists2) {
 			for (int i=0; i<vert.size();i++) {
 				for (int j=0; j<edges.size();j++) {
 					if (grapher[i+1][j+1] == "1" && grapher[0][j+1].contains(findsrc)) {
@@ -271,6 +292,9 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 			if (x >=50) {
                break;
            }
+		}
+		if (exists1 == false || exists2 ==false) {
+			System.err.println("vertices don't exist: ");
 		}
         // if we reach this point, source and target are disconnected
         return disconnectedDist;
