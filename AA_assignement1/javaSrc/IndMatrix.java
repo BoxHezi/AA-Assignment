@@ -140,10 +140,10 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 
         // Implement me!
 		boolean exists = false;		
+		String token[];
 		for (int j = 0; j < edges.size(); j++) {
-			if (grapher[0][j+1].contains(vertLabel.toString()) && grapher[vert.indexOf(vertLabel)+1][j+1] == "1") {
-				String token[];
-				token = grapher[0][j+1].split(" ");
+			token = grapher[0][j+1].split(" ");
+			if ((token[0].equals(vertLabel.toString()) || token[1].equals(vertLabel.toString())) && grapher[vert.indexOf(vertLabel)+1][j+1] == "1") {
 				if (!token[0].equals(vertLabel.toString()) && !neighbours.contains(token[0])) {
 					neighbours.add(vert.get(vert.indexOf(token[0])));
 				} else if (!token[1].equals(vertLabel.toString()) && !neighbours.contains(token[1])) {
