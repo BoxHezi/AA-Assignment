@@ -123,15 +123,13 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
     public void setMatrix() {
         grapher[0][0] = "";
         for (int j = 0; j < edges.size(); j++) {
-            if (grapher[0][j + 1].equals(edges.get(j))) {
-                for (int x = 0; x < vert.size(); x++) {
-                    if (grapher[x + 1][0].equals(vert.get(x).toString()) && grapher[0][j + 1].contains(vert.get(x).toString())) {
-                        grapher[x + 1][j + 1] = "1";
-                    } else {
-                        grapher[x + 1][j + 1] = "0";
-                    }
-                }
-            }
+ 	       for (int x = 0; x < vert.size(); x++) {
+           		if (grapher[x + 1][0].equals(vert.get(x).toString()) && grapher[0][j + 1].contains(vert.get(x).toString())) {
+           			grapher[x + 1][j + 1] = "1";
+                } else {
+                	grapher[x + 1][j + 1] = "0";
+   	    		}
+    	   }
         }
     }
 
@@ -261,7 +259,7 @@ public class IndMatrix<T extends Object> implements FriendshipGraph<T> {
 		
         for (int i = 0; i < edges.size(); i++) {
 			token = grapher[0][i + 1].split(" ");
-            if (token[1].equals(vertLabel2.toString()) || token[0].equals(vertLabel1.toString())) {
+            if (token[1].equals(vertLabel2.toString()) || token[0].equals(vertLabel2.toString())) {
                 exists1 = true;
             }
 			if (token[1].equals(vertLabel2.toString()) || token[0].equals(vertLabel1.toString())) {
