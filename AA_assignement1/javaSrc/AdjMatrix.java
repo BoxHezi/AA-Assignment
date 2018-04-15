@@ -29,7 +29,7 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
     public void addVertex(T vertLabel) {
         // Implement me!
         if (vertex.contains(vertLabel)) {
-//            System.err.println("Vertex existed!");
+            System.err.println("Vertex existed!");
             return;
         }
         System.out.println("Add vertex: " + vertLabel);
@@ -79,7 +79,7 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
         ArrayList<T> neighbours = new ArrayList<>();
         // Implement me!
         if (!existVertex(vertLabel)) {
-            System.err.println("Vertex doesn't existed!");
+            System.err.println("Vertex " + vertLabel + " doesn't existed!");
             return neighbours;
         }
         int vertIndex = findVertexIndex(vertLabel);
@@ -98,7 +98,7 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
             System.err.println("Vertex doesn't existed!");
             return;
         }
-        System.out.println();
+
         int removeVertexIndex = findVertexIndex(vertLabel);
         Integer[][] newMatrix = new Integer[vertex.size() - 1][vertex.size() - 1];
 
@@ -155,18 +155,15 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
         }
         os.println();
         os.flush();
-        System.out.println(vertex.size());
     } // end of printVertices()
 
     public void printEdges(PrintWriter os) {
         // Implement me!
-        int edgeCounter = 0;
         for (int i = 0; i < matrix.length; i++) {
             ArrayList<Integer> printList = new ArrayList<>();
             for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] == 1) {
                     printList.add(j);
-                    edgeCounter++;
                 }
             }
             if (printList.size() <= 0) {
@@ -179,7 +176,6 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
             os.println();
         }
         os.flush();
-        System.out.println(edgeCounter);
     } // end of printEdges()
 
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
