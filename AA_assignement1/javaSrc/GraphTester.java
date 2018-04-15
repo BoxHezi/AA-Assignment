@@ -64,41 +64,28 @@ public class GraphTester
 			String command = tokens[0];
 			
 			try {
-				BufferedWriter Advert = new BufferedWriter(new FileWriter("AVdataTest.txt",true));
-				BufferedWriter Adedge = new BufferedWriter(new FileWriter("AEdataTest.txt",true));
-				BufferedWriter Neigh = new BufferedWriter(new FileWriter("NdataTest.txt",true));
-				BufferedWriter Reedge = new BufferedWriter(new FileWriter("REdataTest.txt",true));
-				BufferedWriter Revert = new BufferedWriter(new FileWriter("RVdataTest.txt",true));
-				BufferedWriter Sroute = new BufferedWriter(new FileWriter("SdataTest.txt",true));
 				// determine which operation to execute
 				switch (command.toUpperCase()) {
 					// add vertex
 					case "AV":
-						long startTimeAV = System.nanoTime();
 						if (tokens.length == 2) {
 							graph.addVertex(tokens[1]);
 						}
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Advert.write(""+(System.nanoTime() - startTimeAV)+"\n");
-						Advert.close();
 						break;
 	                // add edge
 					case "AE":
-						long startTimeAE = System.nanoTime();
 						if (tokens.length == 3) {
 							graph.addEdge(tokens[1], tokens[2]);
 						}
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Adedge.write(""+(System.nanoTime() - startTimeAE)+"\n");
-						Adedge.close();
 						break;                                    
 					// neighbourhood
 					case "N":
-						long startTimeN = System.nanoTime();
 						if (tokens.length == 2) {
 							ArrayList<String> neighbours = graph.neighbours(tokens[1]);
 							StringBuffer buf = new StringBuffer();
@@ -111,32 +98,24 @@ public class GraphTester
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Neigh.write(""+(System.nanoTime() - startTimeN)+"\n");
-						Neigh.close();
 						break;
 					// remove vertex
 					case "RV":
-						long startTimeRV = System.nanoTime();
 						if (tokens.length == 2) {
 							graph.removeVertex(tokens[1]);
 						}
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Revert.write(""+(System.nanoTime() - startTimeRV)+"\n");
-						Revert.close();
 						break;
 					// remove edge
 					case "RE":
-						long startTimeRE = System.nanoTime();
 						if (tokens.length == 3) {
 							graph.removeEdge(tokens[1], tokens[2]);
 						}
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Reedge.write(""+(System.nanoTime() - startTimeRE)+"\n");
-						Reedge.close();
 						break;		
 					// compute shortest path distance
 					case "S":
@@ -147,8 +126,6 @@ public class GraphTester
 						else {
 							System.err.println(lineNum + ": incorrect number of tokens.");
 						}
-						Sroute.write(""+(System.nanoTime() - startTimeS)+"\n");
-						Sroute.close();
 						break;							
 					// print vertices
 					case "V":
@@ -314,3 +291,5 @@ public class GraphTester
 	} // end of main()
 	
 } // end of class GraphTester
+
+
