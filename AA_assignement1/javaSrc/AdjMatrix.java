@@ -166,6 +166,7 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
                     printList.add(j);
                 }
             }
+            // skip if the vertex doesn't have any edges
             if (printList.size() <= 0) {
                 continue;
             }
@@ -180,7 +181,6 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
 
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
         // Implement me!
-
         if (!existVertex(vertLabel1) || !existVertex(vertLabel2)) {
             System.err.println("One of the vertex doesn't existed!");
             return disconnectedDist;
@@ -239,6 +239,8 @@ public class AdjMatrix<T extends Object> implements FriendshipGraph<T> {
                 return i;
             }
         }
+        // return -1 if vertex is not existed
+        // it is not likely to return -1 as existence will be check before this method is called
         return -1;
     }
 
